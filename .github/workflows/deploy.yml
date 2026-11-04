@@ -35,6 +35,9 @@ jobs:
           aws lambda update-function-code \
             --function-name myFullStack \
             --zip-file fileb://function.zip
+            
+      - name: Wait for Lambda update to complete
+        run: sleep 15      
 
       - name: Update Lambda Environment Variables
         run: |
