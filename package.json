@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node src/app.ts"
+    "start": "node --env-file-if-exists=.env src/app.ts"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
