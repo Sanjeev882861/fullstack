@@ -1,21 +1,22 @@
 import express, {type Express, type Request, type Response} from 'express';
+import serverless from 'serverless-http';
 import { connectToMongoDB } from './testdb.ts';
 
 const app: Express = express();
-const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 const client = await connectToMongoDB();
-const db = client?.db('fullstack');
+const db = client.db('fullstack');
 
-app.get('/', (req: Request, res: Response) => {
-  db?.collection('users').find().toArray().then(users => {
+app.get('/', async (_req: Request, res: Response) => {
+  try {
+    const users = await db.collection('users').find().toArray();
     res.json(users);
-  }).catch(err => {
+  } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching users');
-  });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+export const handler = serverless(app);
+
+export default app;
